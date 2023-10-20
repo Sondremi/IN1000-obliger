@@ -1,0 +1,9 @@
+b) Klassen Spilleliste kunne lest inn filen med sangene (spillelisten) i konstruktøren, dvs. ved opprettelsen av et nytt Spilleliste-objekt. Ser du noen fordel ved ikke å gjøre det i konstruktøren?
+    - Vi kan lese inn sangene flere ganger senere
+
+c) I klassen Spilleliste er det en instansvariabel som lagrer alle sangene i en liste. Nevn minst én, gjerne to årsaker til at det er naturlig å velge en liste fremfor en ordbok her.
+    - Vi lagrer sang-objektet i listen, vi trenger bare å lagre den ene verdien, så trenger ikke en nøkkel
+
+d) Hva må endres i Spilleliste-klassen om rekkefølgen på tittel og artist byttes om i datafilen musikk.txt?
+    - Vi må da endre rekkefølgen som metodene .les_fra_fil og .skriv_til_fil leser og skriver tittel og artist på
+    - må endre rekkefølgen på artist og tittel i returverdien til .streng_til_fil
