@@ -6,7 +6,7 @@ samt den gjennomsnittlige prisen den siste måneden.
 # Lagrer filen i en variabel
 # Filen er lastet ned fra marketwatch.com
 # (Har lagt ved en fil som kan brukes)
-filnavn = "Oblig/Innlevering 5/egen_oppgave_stock_data.csv"
+filnavn = "egen_oppgave_stock_data.csv"
 
 def hent_data(filnavn):
     """Funksjonen leser data fra csv filen, lagrer det i en ordbok med
