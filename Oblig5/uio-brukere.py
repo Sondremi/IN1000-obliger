@@ -6,10 +6,10 @@ bruker får så mulighet til å printe ut alle epostene
 
 def lag_brukernavn(navn, ordbok):
     """Funksjonen tar inn navn og ordboken som argumenter, og returnerer brukernavnet til bruker"""
-    # navn = str(input("Skriv inn hele navnet ditt: "))
 
     # Splitter navnet på mellomrom og lagrer hvert ord som et element i en liste
     navn_delt = navn.split()
+    assert len(navn_delt) == 2, "Må være formattert 'fornavn etternavn'"
 
     # Lagrer brukernavnet som fornavnet og første bokstav i etternavnet
     brukernavn = (navn_delt[0] + navn_delt[1][0]).lower()
@@ -18,6 +18,7 @@ def lag_brukernavn(navn, ordbok):
     teller = 1
     while brukernavn in ordbok:
         brukernavn += navn_delt[1][teller]
+        teller += 1
     
     # Returnerer brukernavnet
     return brukernavn
@@ -49,25 +50,27 @@ ordbok = {}
 # Definerer variabelen for å kunne starte løkken
 bruker_inp = ""
 while bruker_inp != "s":
-    # Ber bruker oppgi navn og suffix
-    navn = str(input("Skriv inn navnet ditt: "))
-    suffix = str(input("Skriv inn epost suffix: "))
+    # Ber bruker oppgi valg
+    print("\nVelg et alternativ:")
+    print("i: Lag brukernavn")
+    print("p: Skriv ut eposter")
+    print("s: Avslutt")
+    bruker_inp = input("Valg: ").strip().lower()
 
-    # Lagrer brukernavnet i en variabel
-    brukernavn = lag_brukernavn(navn, ordbok)
-    # Legger brukernavnet til i ordboken over brukere    
-    ordbok[brukernavn] = suffix
+    if bruker_inp == "i":
+        # Ber bruker oppgi navn og suffix
+        navn = str(input("Skriv inn hele navnet ditt: "))
+        suffix = str(input("Skriv inn epost suffix: "))
 
-    # Printer ut en instruks for bruker
-    print("\nSkriv f for å fortsette")
-    print("Skriv p for skrive ut eposter")
-    print("Skriv s for å avslutte")
-    # Bruker oppgir et valg
-    bruker_inp = str(input("Svar: "))
+        # Lagrer brukernavnet i en variabel
+        brukernavn = lag_brukernavn(navn, ordbok)
+        # Legger brukernavnet til i ordboken over brukere med suffix som verdi 
+        ordbok[brukernavn] = suffix
 
-    # Kaller skriv_ut_epost funksjonen, hvis bruker skriver inn p
-    if bruker_inp == "p":
+        print("Brukernavn ble lagret")
+
+    elif bruker_inp == "p":
+        # Kaller på funksjonen som skriver ut epostene
         skriv_ut_epost(ordbok)
     
     # Hvis bruker skriver inn s, vil ikke løkken starte neste runde
-    # Alt annet bruker skriver inn, gjør at løkken starter på nytt.
