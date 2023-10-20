@@ -50,13 +50,13 @@ def hovedprogram():
 
     # Gir bruker output på resultatet
     print(f"Setningen består av {len(ordene)} ord")
-    print("\nOrd, Forekomster, Lengde")
+    print("\nOrd | Forekomster | Lengde")
 
     # Oppretter en teller som kan brukes på indexen til listen ord_lengder
     index = 0
     # Går gjennom hvert element i ordboken og printer 
     for ordet, forekomst in ord_ordbok.items():
-        print(f"{ordet}, {forekomst}, {ord_lengder[index]}")
+        print(f"{ordet: <10}{forekomst: <12}{ord_lengder[index]}")
         # Øker indexen/telleren 
         index += 1
 
