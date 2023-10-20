@@ -19,7 +19,7 @@ def divisjon(tall1, tall2):
 
 # Kontrollerer for assert-error med ulike verdier til hver funksjon
 assert(addisjon(2, 5) == 7)
-assert(addisjon(5, -10) == -15)
+assert(addisjon(5, -10) == -5)
 assert(addisjon(-2, -12) == -14)
 assert(subtraksjon(5, 2) == 3)
 assert(subtraksjon(5, -10) == 15)
