@@ -24,7 +24,10 @@ def returner_ordbok(filnavn):
 
 # Kaller på funksjon og lagrer ordboken i en variabel
 ordbok = returner_ordbok(filnavn_temp_mnd)
-# print(returner_ordbok(filnavn_temp_mnd))
+# Skriver ut måned og temp på en oversiktlig måte
+print("\nHøyeste temperatur registrert hver måned:")
+for dato, temp in ordbok.items():
+    print("Måned: ", dato, "\tTemperatur: ", temp)
 
 
 def varmerekord(ordbok, filnavn):
@@ -47,15 +50,20 @@ def varmerekord(ordbok, filnavn):
 
 # Kaller på funksjonen og lagrer den oppdaterte ordboken i en variabel
 oppdatert_ordbok = varmerekord(ordbok, filnavn_temp_dag)
-#print(varmerekord(ordbok, filnavn_temp_dag))
+# Skriver ut måned og temp på en oversiktlig måte
+print("\nOppdatert høyeste temperatur hver måned:")
+for måned, temp in oppdatert_ordbok.items():
+    print("Måned: ", måned, "\tNyeste temperatur: ", temp)
 
 
 def skriv_til_fil(ordbok, filnavn):
     """Prosedyren henter inn den oppdaterte ordboken og filnavnet,
         oppretter en ny fil, og skriver inn dataen på riktig format"""
-    # Lager ny fil med samme navn som parameteren, bare med '2' lagt til på slutten
-    # Oppretter en ny fil istedet for å endre den gamle
-    fil = open(f"{filnavn[:-4]}2{filnavn[46:]}", "w")
+    # Legger til '2' i slutten på filnavnet og lager en ny fil med det nye filnavnet
+    filnavn_delt = filnavn.split('.')
+    nytt_filnavn = f"{filnavn_delt[0]}2.{filnavn_delt[1]}"
+
+    fil = open(nytt_filnavn, "w", encoding='utf-8')
     # Går gjennom ordboken
     for mnd in ordbok:
         # Skriver til filen på riktig format
@@ -64,50 +72,41 @@ def skriv_til_fil(ordbok, filnavn):
     fil.close()
 
 # Kaller prosedyren
-# skriv_til_fil(oppdatert_ordbok, filnavn_temp_mnd)
+skriv_til_fil(oppdatert_ordbok, filnavn_temp_mnd)
 
 
 def varmebølge(filnavn):
     """Funksjonen leser inn temperaturen for hver dag fra csv filen, 
         og returnerer om det har vært en varmebølge."""
-    # Åpner filen
-    fil = open(filnavn, "r")
     # Oppretter en tom liste for å lagre varmebølgene
     varmebølger = []
     # Oppretter en variabel for å holde telling på dager på rad med temp over 25 grader
-    teller = 0
-    # Går gjennom hver linje i filen
-    for linje in fil:
-        # Deler linjen i kolonner
+    teller = 1
+
+    # Åpner filen og går gjennom hver rad(linje)
+    for linje in open(filnavn):
+        # Deler linjen i kolonner, deler på komma
         data = linje.strip().split(",")
-        # Hvis temperaturen er over 25 grader
+        # Hvis temperaturen er over 25 grader (kvalifiserers til å være en del av varmebølge)
         if float(data[2]) > 25:
-            # Hvis telleren er 0, altså at forrje temp var under 25 grader
-            if teller == 0:
-                # Lagrer vi datoen til starten på det som kan være en varmebølge
-                start = f"{data[1]}. {data[0]}"
-            # Øker telleren med 1
+            # Hvis telleren er 1 betyr at det er første temp i året, eller at sist temp var under 25
+            if teller == 1:
+                # Lagrer datoen til starten på det som kan være en varmebølge
+                start = (f"{data[1]}. {data[0]}")
+            # Øker teller
             teller += 1
-            
-            # Henter data fra neste linje
-            # Deler opp på samme måte
-            neste = next(fil)
-            neste = neste.strip().split(",")
-            
-            # Hvis temperaturen på neste linje er over 25 grader, 
-            # Og telleren er større eller lik 5, er det en varmebølge
-            if float(neste[2]) < 25 and teller >= 5:
-                # Lagrer sluttdatoen på samme format
-                slutt = f"{neste[1]}. {neste[0]}"
-                # Legger til dato for starten og slutten på varmebølgen
-                varmebølger.append([start, slutt])
-                # Setter teller tilbake til 0, siden neste linje ikke er over 25 grader
-                teller = 0
         else:
+            # Hvis telleren har telt minst 5 dager på rad, så har vi en varmebølge
+            if teller >= 6:
+                # Lagrer datoen til slutten på varmøbølgen
+                # Må legge til dagen før, siden denne dagen er første dag etter varmebølge under 25 grader
+                # Konverterer derfor dagen fra dato til et integrer og trekker fra 1
+                slutt = f"{int(data[1])-1}. {data[0]}"
+                # Legger til en liste med start- og sluttdato i listen med varmebølger
+                varmebølger.append([start, slutt])
             # Setter teller til 0 siden tempen ikke var over 25 grader
-            teller = 0
-    # Lukker filen
-    fil.close()
+            teller = 1
+    
     # Returnerer listen over varmebølger
     return varmebølger
 
@@ -116,7 +115,8 @@ varmebølger = varmebølge(filnavn_temp_dag)
 
 # Gir bruker en oversiktlig output
 print(f"\nDet ble registrert {len(varmebølger)} varmebølger")
-print("Her er en liste over varmebølgene: ")
-# Går gjennom listen hentet fra funksjonen
-for start, slutt in varmebølger:
-    print(f"Fra {start} til {slutt}")
+if len(varmebølger) > 0:
+    print("Her er en liste over varmebølgene: ")
+    # Går gjennom listen hentet fra funksjonen
+    for start, slutt in varmebølger:
+        print(f"Fra {start} til {slutt}")
