@@ -22,17 +22,20 @@ class Verden:
     def oppdatering(self):
         """Oppdaterer rutenettet til neste generasjon"""
         # Går gjennom alle cellene
-        for rad in range(len(self._rutenett._rutenett)):
-            for kol in range(len(self._rutenett._rutenett[rad])):
+        for rad in range(self._rader):
+            for kol in range(self._kolonner):
                 # Henter cellen med koordinatene fra rad og kolonne
                 celle = self._rutenett.hent_celle(rad, kol)
                 # a: Teller levende naboer for hver celle
                 celle.tell_levende_naboer()
+
+        # Går gjennom alle cellene
+        for rad in range(self._rader):
+            for kol in range(self._kolonner):
+                # Henter cellen med koordinatene fra rad og kolonne
+                celle = self._rutenett.hent_celle(rad, kol)
                 # b: Oppdaterer status på hver celle
                 celle.oppdater_status()
         
         #c: Øker telleren for antall generasjoner
         self._generasjonsnummer += 1
-
-        # Tegner neste generasjon
-        self.tegn()
