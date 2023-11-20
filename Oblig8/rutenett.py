@@ -27,8 +27,8 @@ class Rutenett:
 
     def fyll_med_tilfeldige_celler(self):
         """Fyller rutene med celler"""
-        for rad in range(len(self._rutenett)):
-            for kol in range(len(self._rutenett[rad])):
+        for rad in range(self._ant_rader):
+            for kol in range(self._ant_kolonner):
                 self.lag_celle(rad, kol)
 
     def lag_celle(self, rad, kol):
@@ -50,8 +50,8 @@ class Rutenett:
         for i in range(10):
             print()
 
-        for rad in range(len(self._rutenett)):
-            for kol in range(len(self._rutenett[rad])):
+        for rad in range(self._ant_rader):
+            for kol in range(self._ant_kolonner):
                 # Henter celle-objektet fra rutenettet med koordinater rad, kol
                 celle = self.hent_celle(rad, kol)
                 print(celle.hent_status_tegn(), end="")
@@ -60,7 +60,6 @@ class Rutenett:
     def _sett_naboer(self, rad, kol):
         """Lagrer alle nabo-cellene til hovedcellen i listen med naboer"""
         celle = self.hent_celle(rad, kol)
-        celle._naboer = []
 
         # Sjekker naboer i en 3x3 rute rundt hovedcellen
         for nabo_rad in range(rad - 1, rad + 2):
@@ -70,20 +69,20 @@ class Rutenett:
                     # Sjekker om nabocellen er hovedcellen
                     if not (nabo_rad == rad and nabo_kol == kol):
                         # Legger naboene til i nabo-listen til hovedcellen
-                        celle._naboer.append(self.hent_celle(nabo_rad, nabo_kol))
+                        celle.legg_til_nabo(self.hent_celle(nabo_rad, nabo_kol))
 
 
     def koble_celler(self):
         """Kobler cellene sammen ved å legge til nabo-cellene til hver celle"""
-        for rad in range(len(self._rutenett)):
-            for kol in range(len(self._rutenett[rad])):
+        for rad in range(self._ant_rader):
+            for kol in range(self._ant_kolonner):
                 self._sett_naboer(rad, kol)
 
     def hent_alle_celler(self):
         """Returnerer en flat liste med alle cellene"""
         alle_celler = []
-        for rad in range(len(self._rutenett)):
-            for kol in range(len(self._rutenett[rad])):
+        for rad in range(self._ant_rader):
+            for kol in range(self._ant_kolonner):
                 alle_celler.append(self.hent_celle(rad, kol))
         return alle_celler
 
@@ -91,9 +90,9 @@ class Rutenett:
         """Nullstiller variabelen med antall levende celler.
             Teller levende celler og returnerer antallet"""
         ant_levende_celler = 0
-        for rad in range(len(self._rutenett)):
-            for kol in range(len(self._rutenett[rad])):
+        for rad in range(self._ant_rader):
+            for kol in range(self._ant_kolonner):
                 # Henter celle med koordinatene og sjekker om status er levende
-                if self.hent_celle(rad, kol)._status == "levende":
+                if self.hent_celle(rad, kol).er_levende():
                     ant_levende_celler += 1
         return ant_levende_celler
